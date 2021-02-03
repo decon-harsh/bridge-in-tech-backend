@@ -366,3 +366,55 @@ class Program(Resource):
             return ProgramDAO.update_program(organization_id, program_id, data)
         return is_wrong_token
 
+    # @classmethod
+    # @organizations_ns.doc("send mentorship request")
+    # @organizations_ns.response(HTTPStatus.OK, f"{messages.PROGRAM_SUCCESSFULLY_UPDATED}")
+    # @organizations_ns.response(
+    #     HTTPStatus.BAD_REQUEST,
+    #     f"{messages.NO_DATA_FOR_UPDATING_PROFILE_WAS_SENT}\n"
+    #     f"{messages.EMAIL_INPUT_BY_USER_IS_INVALID}\n"
+    #     f"{messages.PHONE_OR_MOBILE_IS_NOT_IN_NUMBER_FORMAT}\n"
+    #     f"{messages.PROGRAM_STATUS_INPUT_IS_INVALID}\n"
+    #     f"{messages.ORGANIZATION_OR_PROGRAM_STATUS_FIELD_IS_MISSING}\n"
+    #     f"{messages.UNEXPECTED_INPUT}"
+    # )
+    # @organizations_ns.expect(auth_header_parser, update_program_request_model, validate=True)
+    # def put(cls, organization_id, program_id):
+    #     """
+    #     Updates a program where program ID and organization id are passed as parameters.
+
+    #     A user with valid access token can use this endpoint to update a program.
+    #     The endpoint takes any of the given parameters (program name, start date, 
+    #     end date, description, target skills, target candidate selected from any of
+    #     the gender (value as per Gender enum), age (Age enum), ethnicity (Ethnicity enum), 
+    #     sexual orientation (SexualOrientation enum), religion (Religion enum), physical 
+    #     ability (PhysicalAbility enum), mental ability (MentalAbility enum), socio economic
+    #     (SocioEEconomic enum), highest education (HighestEducation enum), years of experience
+    #     (YearsOfExperience enum), or other which value is self-defined by organization, payment 
+    #     currency code, payment amount, contact type (value as per ContactType enum), zone 
+    #     (with value as per Zone Enum value), mentee's responsibility, mentor's responsibility, 
+    #     organization's responsibility, mentee's requirements, mentor's requirements, 
+    #     resources provided, contact person's name, contact person's department, program address, 
+    #     contact person's phone, contact person's mobile, contact person's email, program webiste, 
+    #     irc channel, tags, status (with value as per ProgramStatus Enum value), and creation date.
+    #     """
+    #     token = request.headers.environ["HTTP_AUTHORIZATION"]
+
+    #     is_wrong_token = validate_token(token)
+
+    #     if not is_wrong_token:
+    #         data = request.json
+    #         if not data:
+    #             return messages.NO_DATA_FOR_UPDATING_PROFILE_WAS_SENT, HTTPStatus.BAD_REQUEST
+
+    #         is_field_valid = expected_fields_validator(data, update_program_request_model)
+    #         if not is_field_valid.get("is_field_valid"):
+    #             return is_field_valid.get("message"), HTTPStatus.BAD_REQUEST
+            
+    #         is_not_valid = validate_update_program(data)
+    #         if is_not_valid:
+    #             return is_not_valid, HTTPStatus.BAD_REQUEST
+
+    #         return ProgramDAO.update_program(organization_id, program_id, data)
+    #     return is_wrong_token
+

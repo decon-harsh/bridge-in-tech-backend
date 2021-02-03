@@ -83,9 +83,9 @@ class LocalConfig(BaseConfig):
     DEBUG = True
 
     # Using a local postgre database
-    SQLALCHEMY_DATABASE_URI = "postgresql:///bit_schema"
+    # SQLALCHEMY_DATABASE_URI = "postgresql:///bit_schema"
     
-    # SQLALCHEMY_DATABASE_URI = BaseConfig.build_db_uri()
+    SQLALCHEMY_DATABASE_URI = BaseConfig.build_db_uri()
     
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
@@ -97,9 +97,9 @@ class TestingConfig(BaseConfig):
     MOCK_EMAIL = True
     
     # Using a local postgre database
-    SQLALCHEMY_DATABASE_URI = "postgresql:///bit_schema_test"
+    # SQLALCHEMY_DATABASE_URI = "postgresql:///bit_schema_test"
     
-    # SQLALCHEMY_DATABASE_URI = BaseConfig.build_db_test_uri()
+    SQLALCHEMY_DATABASE_URI = BaseConfig.build_db_test_uri()
 
 class StagingConfig(BaseConfig):
     """Staging configuration."""
