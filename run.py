@@ -33,6 +33,9 @@ def create_app(config_filename: str) -> Flask:
     from app.database.models.bit_schema.mentorship_relation_extension import (
         MentorshipRelationExtensionModel,
     )
+    from app.database.models.bit_schema.associations import (
+        MembersAssocaitionModel,
+    )
 
     migrate = Migrate(app, db)
 
@@ -76,6 +79,7 @@ def create_tables():
     from app.database.models.bit_schema.mentorship_relation_extension import (
         MentorshipRelationExtensionModel,
     )
+    from app.database.models.bit_schema.associations import MembersAssocaitionModel
 
     db.create_all()
 
@@ -92,6 +96,7 @@ def create_tables():
             "UserExtensionModel": UserExtensionModel,
             "PersonalBackgroundModel": PersonalBackgroundModel,
             "MentorshipRelationExtensionModel": MentorshipRelationExtensionModel,
+            "MentorshipRelationExtensionModel": MembersAssocaitionModel,
         }
 
 if __name__ == "__main__":

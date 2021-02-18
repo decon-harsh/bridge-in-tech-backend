@@ -161,6 +161,9 @@ PERSONAL_BACKGROUND_SUCCESSFULLY_UPDATED = {
 PERSONAL_BACKGROUND_DATA_HAS_MISSING_FIELD = {
     "messages": "Personal background information has missing one of its fields"
 }
+ALREADY_A_MEMBER = {
+    "messages" : "Already a member"
+}
 
 
 # Relation constraints
@@ -244,6 +247,9 @@ UNACCEPTED_STATE_RELATION = {
 }
 MENTORSHIP_RELATION_NOT_IN_ACCEPT_STATE = {
     "message": "Mentorship relation is" " not in the accepted state."
+}
+OWNER_CANT_ADD_THEMSELVES = {
+    "message": "You can't add yourself btw you are the owner of this organization"
 }
 
 # Login errors
@@ -349,6 +355,9 @@ PROGRAM_SUCCESSFULLY_CREATED = {
 PROGRAM_SUCCESSFULLY_UPDATED = {
     "message": "Program was updated successfully."
 }
+MEMBER_SUCCESSFULLY_ADDED = {
+    "message": "Member was successfully added."
+}
 
 # confimation
 ACCOUNT_ALREADY_CONFIRMED = {"message": "Account already confirmed."}
@@ -376,4 +385,7 @@ USER_ID_IS_NOT_RETRIEVED_WITH_GET_ORGANIZATION = {
 }
 NOT_ORGANIZATION_REPRESENTATIVE = {
     "message": "You have not declared that you are representing an organization."
+}
+UNAUTHORIZED_ADD_MEMBER = {
+    "message" : "This user doesn't have enough permission to add a member in this organization."
 }

@@ -3,6 +3,7 @@ from sqlalchemy import null
 from app.database.sqlalchemy_extension import db
 from app.utils.bitschema_utils import OrganizationStatus, Timezone
 from app.database.models.bit_schema.program import ProgramModel
+from app.database.models.bit_schema.associations import MembersAssocaitionModel
 
 
 class OrganizationModel(db.Model):
@@ -41,6 +42,11 @@ class OrganizationModel(db.Model):
     # Programs relationship
     programs = db.relationship(
         ProgramModel, backref="organization", cascade="all,delete", passive_deletes=True
+    )
+
+    # # Many to Many
+    members = db.relationship(
+       MembersAssocaitionModel, backref='members'
     )
 
     def __init__(self, rep_id, name, email, address, website, timezone):

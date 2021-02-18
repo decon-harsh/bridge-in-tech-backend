@@ -17,7 +17,8 @@ from app.utils.validation_utils import expected_fields_validator
 from app.api.models.organization import *
 from app.api.validations.organization import validate_update_organization, validate_update_program
 from app.utils.bit_constants import DEFAULT_PAGE, DEFAULT_ORGANIZATIONS_PER_PAGE, DEFAULT_PROGRAMS_PER_PAGE
-
+from app.database.models.bit_schema.associations import MembersAssocaitionModel
+from app.database.models.bit_schema.organization import OrganizationModel
 
 organizations_ns = Namespace("Organizations", description="Operations related to organizations")
 add_models_to_namespace(organizations_ns)
@@ -110,6 +111,65 @@ class Organization(Resource):
               
         return is_wrong_token
 
+@organizations_ns.route("organization/<int:organization_id>/add_member/<int:user_id>")
+@organizations_ns.param("organization_id", "The organization identifier")
+@organizations_ns.param("user_id", "The user identifier")
+class OrganizationMember(Resource):
+    @classmethod
+    @organizations_ns.doc(
+        "list_organizations", 
+        params={
+            "name": "Search by organization name", 
+            "page": "Specify page of organizations", 
+            "per_page": "Specify number of organizations per page"})
+    @organizations_ns.response(HTTPStatus.OK, "Successful request", get_organization_response_model)
+    @organizations_ns.response( 
+        HTTPStatus.UNAUTHORIZED,
+        f"{messages.TOKEN_HAS_EXPIRED}\n"
+        f"{messages.TOKEN_IS_INVALID}\n"
+        f"{messages.AUTHORISATION_TOKEN_IS_MISSING}"
+    )
+    @organizations_ns.response(HTTPStatus.NOT_FOUND, f"{messages.ORGANIZATION_DOES_NOT_EXIST}")
+    @organizations_ns.response(
+        HTTPStatus.INTERNAL_SERVER_ERROR, f"{messages.INTERNAL_SERVER_ERROR}"
+    )
+    @organizations_ns.expect(auth_header_parser, validate=True)
+    def post(cls,organization_id,user_id):
+        """
+        Returns organization where the current user is the representative.
+
+        A user with valid access token can use this endpoint to view the organization
+        that they represent. The endpoint doesn't take any other input. 
+        """
+        token = request.headers.environ["HTTP_AUTHORIZATION"]
+
+        is_wrong_token = validate_token(token)
+
+        if not is_wrong_token:
+            try:
+                user_json = (AUTH_COOKIE["user"].value)
+                user = ast.literal_eval(user_json)
+                
+                # check if organization exist
+                valid_organization = OrganizationModel.find_by_id(organization_id)
+                if not valid_organization:
+                    return messages.ORGANIZATION_DOES_NOT_EXIST, HTTPStatus.NOT_FOUND
+                
+                # check if logged in user is rep of the organization mentioned
+                if int(user['id']) != valid_organization.rep_id:
+                    return messages.UNAUTHORIZED_ADD_MEMBER , HTTPStatus.UNAUTHORIZED
+                if user_id==valid_organization.rep_id:
+                    return messages.OWNER_CANT_ADD_THEMSELVES, HTTPStatus.CONFLICT
+                member = MembersAssocaitionModel(user_id=user_id,organization_id=organization_id)
+                if MembersAssocaitionModel.query.filter_by(user_id=user_id).filter_by(organization_id=organization_id).first():
+                    return messages.ALREADY_A_MEMBER, HTTPStatus.CONFLICT
+                if member.save_to_db() == "Session Rollbacked":
+                    return messages.USER_DOES_NOT_EXIST,HTTPStatus.NOT_FOUND                
+                return messages.MEMBER_SUCCESSFULLY_ADDED, HTTPStatus.CREATED
+            
+            except ValueError as e:
+                return e, HTTPStatus.BAD_REQUEST
+        return is_wrong_token
     
 @organizations_ns.route("organizations")
 class OrganizationsList(Resource):
